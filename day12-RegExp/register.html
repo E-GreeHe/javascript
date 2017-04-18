@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+				list-style: none;
+				border: none;
+			}
+			body{
+				background: #444444;
+			}
+			h2{
+				color: green;
+				margin-bottom: 10px;
+			}
+			ul{
+				margin-bottom: 10px;
+			}
+			#box{
+				width: 400px;
+				margin: 0 auto;
+			}
+			ul>li{
+				height: 30px;
+				line-height: 20px;
+				margin-bottom: 10px;
+			}
+			ul>li>label{
+				width: 150px;
+				height: 30px;
+				line-height: 30px;
+				float: left;
+				color: #ccc;
+			}
+			ul>li>input{
+				width: 150px;
+				float: right;
+				height: 25px;
+				margin-right: 40px;
+			}
+			#msg{
+				margin: 20px auto 20px auto;
+				width: 200px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				background: orange;
+				border-radius: 5px;
+			}
+			ul>li>div{
+				width: 150px;
+				float: right;
+				margin-right: 40px;
+			}
+			ul>li>div>span{
+				width: 40px;
+				border: 1px solid black;
+				height: 23px;
+				display: block;
+				float: left;
+				background: white;
+				color: #000000;
+				text-align: center;
+				line-height: 23px;
+			}
+			ul>li>div>.active{
+				background: red;
+			}
+			#box>div{
+				text-align: center;
+				margin-bottom: 10px;
+			}
+			#btn{
+				width: 70px;
+				height: 30px;
+			}
+		</style>
+		<script src="common.js"></script>
+		<script type="text/javascript">
+			onload = function(){
+				var aIinput = document.getElementsByTagName('input');
+				var oMsg = document.getElementById("msg");
+				var aSpan = document.getElementsByTagName('span');
+				var b1,b2,b3,b4,b5,b6;
+				/////////
+//				var  str = document.cookie;
+//				console.log(str);
+				 //存储单条cookie
+//				if(str){
+//					var  arr = str.split('; ');
+//					
+//					for(var i = 0;i<arr.length;i++){
+//						//arr[i]
+//						var newArr = arr[i].split('=')
+//						//[name,jjk]  [psw,123456]
+//						if(newArr[0]=="name"){
+//							aIinput[0].value = newArr[1]
+//						}
+//						if(newArr[0]=="psw"){
+//							aIinput[1].value = newArr[1]
+//						}
+//							
+//					}
+//				}
+				// 设置cookie 
+				//处理对象
+				var str  = getCookie('user');
+				if(str){
+					var arr = JSON.parse(str);
+					aIinput[1].value =  arr[arr.length-1].name;
+					aIinput[2].value = arr[arr.length-1].psw;
+				}
+				////////////最先执行
+				
+
+
+				// 表单处理
+				// 昵称
+				aIinput[0].onblur = function(){
+					var nickname = this.value;
+					// 中英文皆可
+					if( /^[a-zA-Z\u2E80-\u9FFF]{3,}$/.test(nickname) ){
+						oMsg.innerHTML = "";
+						b1 = true;
+					}else{
+						oMsg.innerHTML = "昵称必须为3位以上"
+						b1= false;
+					}
+				}
+
+				// 用户名
+				aIinput[1].onblur = function(){
+					var	name =	this.value;
+					var reg  = /^[a-zA-Z_]\w{3,}$/;//只能包含数字、字母 ，并且长度不小于3位;
+					
+//					if(reg.test(name)){}
+					if(/[a-zA-Z_]\w{3,}$/.test(this.value)){
+						oMsg.innerHTML = "";
+						b2 = true;
+					}else{
+						oMsg.innerHTML = "用户名输入错误"
+						b2 = false;
+					}
+				}
+				
+			
+				// 密码
+				aIinput[2].onblur = function(){
+					// 至少6位
+					var  psw = this.value;
+					// var reg = /^.{6,20}$/;   //6到20位的随机字符
+					if( /^.{6,20}$/.test(psw) ){
+						oMsg.innerHTML = "";
+						b3 = true;
+					}else{
+						oMsg.innerHTML = "密码输入错误";
+						b3=false;
+					}
+				}
+				// 确认密码
+				aIinput[3].onkeyup = function(){
+					var psw = this.value; 
+					if(psw==aIinput[2].value){
+						oMsg.innerHTML = "";
+						b4= true;
+					}else{
+						oMsg.innerHTML = "密码输入不一致";
+						b4 = false;
+					}
+					
+					//密码的等级
+					// 纯数字或纯字母
+					if( /^\d{6,}$/.test(psw) || /^[a-zA-Z]{6,}$/.test(psw) ){
+						for(var i=0;i<aSpan.length;i++){
+							aSpan[i].style.background = "white";
+						}
+						aSpan[0].style.background = "red";
+					}
+					// 数字 字母组合
+					else if( /^[0-9a-zA-Z]{6,}$/.test(psw) && /[0-9]+/.test(psw) && /[a-zA-Z]+/.test(psw) ){
+						for(var i=0;i<aSpan.length;i++){
+							aSpan[i].style.background = "white";
+						}
+						aSpan[1].style.background = "orange";
+					}else if( /^.{6,}$/.test(psw) && /[0-9]+/.test(psw) && /[a-zA-Z]+/.test(psw) && /\S+/.test(psw) ){
+						for(var i=0;i<aSpan.length;i++){
+							aSpan[i].style.background = "white";
+						}
+						aSpan[2].style.background = "green";
+					}
+				}
+				// 身份证
+				aIinput[4].onblur = function(){
+					var pid = this.value;
+					var reg = /^\d{18}$/;
+					
+					if(reg.test(pid)){
+						oMsg.innerHTML = "";
+						b5 = true;
+						
+					}else{
+						oMsg.innerHTML = "身份证输入错误输入错误";
+						b5 = false;
+					}
+				}
+				// 电话
+				aIinput[5].onblur = function(){
+					var phone = this.value;
+					var reg = /^1(3|5|7|8)\d{9}$/;
+					
+					if( reg.test(phone) ){
+						oMsg.innerHTML = "";
+						b6 = true;
+					}else{
+						oMsg.innerHTML = "手机号码输入错误";
+						b6 =false;
+					}
+				}
+				// 邮件
+				aIinput[6].onblur = function(){
+					var messge = this.value;
+					var reg = /^[\w\-\.]+@[\da-z\-]+(\.[a-z]{2,3}){1,2}$/;
+					if( reg.test(messge) ){
+						oMsg.innerHTML = "";
+						b7 = true;
+					}else{
+						oMsg.innerHTML = "邮件格式不对";
+						b7 =false;
+					}
+				}
+				
+				//点击注册按钮
+				document.getElementById("btn").onclick = function(){
+					//checkbox 是否被勾选
+					//用户输入是否完成
+					
+					if(b1 && b2 && b3 && b4 && b5&& b6 && b7){//判断输入是否正常
+						if(aIinput[8].checked){ //判断勾选
+//							存单条cookie
+//							var d = new Date();
+//							d.setDate(d.getDate()+10);
+//							document.cookie = "name=" + aIinput[0].value+";expires="+d+";path=/";
+//							document.cookie = "psw=" + aIinput[1].value+";expires="+d+";path=/";	
+//								有且仅有一个用户
+							//存对象
+							//[{name:jjk,psw:123456},{},{}]
+							//第一步获取当前的cookie 并判断是否有用户
+							var sCookie = getCookie('user')   //名为user 的value
+							var aUser = sCookie?JSON.parse(sCookie):[];
+							var bool = true; //用户是否存在   true不存在     false表示存在 一 开始就假设用户不存在
+							
+							for(var i =0 ;i<aUser.length;i++){
+								//aUser[i]
+								if(aUser[i].name == aIinput[1].value){
+									bool = false;
+								}
+							}
+							
+							if(bool){
+								//用户没有注册
+								//将新用户压进用户数组
+								aUser.push({"name":aIinput[1].value,"psw":aIinput[2].value});
+								
+								//修改cookie 为最新
+								setCookie('user',JSON.stringify(aUser),10,'/');
+							}else{
+								oMsg.innerHTML = "您输入的用户名已注册";
+								setTimeout(function(){
+									location.reload();
+								},2000)
+							}
+						}
+					}else{
+						location.reload();
+					}
+				}
+				
+
+
+			}
+		</script>
+	</head>
+	<body>
+		<div id="box">
+			<div id="msg">这里显示提示信息</div>
+			<h2>账号详细资料</h2>
+			<ul id="pinfo">
+				<li><label for="nickname">昵称</label><input type="text" name="nickname" /></li>
+				<li><label for="username">用户姓名</label><input type="text" name="username" /></li>
+				<li><label for="psw">用户密码</label><input type="password" name="psw" /></li>
+				<li><label for="checkpsw">确认密码</label><input type="password" name="checkpsw" /></li>
+				<li><label for="username">密码等级</label><div><span >低</span><span>中</span><span>高</span></div></li>
+			</ul>
+			<h2>个人信息资料</h2>
+			<ul id="addinfo">
+				<li><label for="pid">身份证</label><input type="text" name="pid" /></li>
+				<li><label for="phone">手机号码</label><input type="text" name="phone" /></li>
+				<li><label for="messge">邮件</label><input type="text" name="messge" /></li>
+				<li><label for="icode">验证码</label><input type="text" name="icode" /></li>
+			</ul>
+			<div >
+				<input type="checkbox" name="" id="" value="" />10内免登陆
+			</div>
+			<div>
+				<input type="button" name="" id="btn" value="注册" />
+			</div>
+		</div>
+	</body>
+</html>

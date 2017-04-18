@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/font-awesome-ie7.css" />
+		<link rel="stylesheet" href="css/font-awesome-ie7.min.css" />
+		<link rel="stylesheet" href="css/font-awesome.css" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			div {
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			
+			div::after {
+				font-family: fontawesome;
+				content: "\f06c";
+				font-size: 18px;
+				color: green;
+			}
+		</style>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				function getPos(ev){
+					var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+					var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+
+					return {
+						x: ev.clientX + scrollLeft,
+						y: ev.clientY + scrollTop
+					};
+				}
+
+				document.onmousemove = function(ev){
+					var leaf = document.getElementsByTagName('div');
+					var oEvent = ev || event;
+
+					var pos = getPos(oEvent);
+
+					for(var i = leaf.length - 1; i > 0; i--) {
+						leaf[i].style.left = leaf[i - 1].offsetLeft + 'px';
+						leaf[i].style.top = leaf[i - 1].offsetTop + 'px';
+					}
+
+					leaf[0].style.left = pos.x + 'px';
+					leaf[0].style.top = pos.y + 'px';
+				};
+			})
+		</script>
+	</head>
+
+	<body>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+		<div class="fa fa-leaf"></div>
+	</body>
+
+</html>

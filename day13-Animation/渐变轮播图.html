@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>渐现轮播图</title>
+    <style>
+        ul{padding:0;margin:0;list-style: none;}
+        a{text-decoration:none;}
+        #focus{position:relative;width:810px;}
+        #bigpic{position:relative;width:810px;height:320px;}
+        #bigpic li{position:absolute;top:0;left:0;width:810px;height:320px;overflow:hidden;}
+        #bigpic li img{width: 100%;height: 100%;}
+        #smallpic{position:relative;left:0;margin-top:10px;overflow:hidden;width:10000px;}
+        #smallpic li{float:left;padding-right:10px;}
+        #smallpic img{width:160px;}
+        .prev,.next{position:absolute;top:130px;height:60px;width:30px;line-height:60px;text-align:center;background-color:#f60;color:#fff;}
+        .prev{left:0;}
+        .next{right:0;}
+
+        .small-wrap{width:810px;overflow:hidden;}
+    </style>
+    <script src="common.js"></script>
+    <script>
+        /*
+            1)自动轮播
+                <1>大图渐现效果
+                <2>小图渐现效果
+                <3>小图左右滚动
+            2）鼠标移入轮播停止，移开轮播重启
+            3）左右按钮显示上一张，下一张
+            4）点击小图，显示相应的大图效果
+         */
+        window.onload = function(){
+            var focus = document.getElementById('focus');
+            var bigPic = document.getElementById('bigpic');
+            var smallPic = document.getElementById('smallpic');
+
+
+
+            // 当前索引，默认第一张
+            var index = 0;
+
+            //  上一张图片索引
+            var lastIndex = 0;
+
+            // 小图宽度
+            var smallPicWidth = smallPic.children[0].offsetWidth;
+
+            //图片的数量
+            var len = bigPic.children.length;
+
+            // 初始化操作
+            init();
+
+            //自动轮播
+            var timer = setInterval(animation,3000);
+
+            // 鼠标移入轮播停止，移开轮播重启
+            focus.onmouseover = function(){
+                clearInterval(timer);
+            }
+            focus.onmouseout = function(){
+                timer = setInterval(animation,3000);
+            }
+
+            // 上一张，下一张
+            // 事件代理（利用冒泡的原理来实现相应的效果）
+            focus.onclick = function(e){
+                e = e || window.event;
+
+                if(e.target.className == 'prev'){
+                    index--;
+                    showImg();
+                }else if(e.target.className == 'next'){
+                    index++;
+                    showImg();
+                }
+            }
+            
+
+            // 轮播动画函数
+            function animation(){
+                index++;
+
+                showImg();
+            }
+
+
+            // 图片显示函数
+            // 每显示一张图片做了什么操作
+            function showImg(){
+
+                // 处理index的临界点
+                if(index<0){
+                    index = len - 1;
+                }else if(index >= len){
+                    index = 0;
+                }
+
+                // 上一张大图透明度变为0
+                animate(bigPic.children[lastIndex],{opacity:0});
+
+                // 当前索引对应大图透明度变成1
+                animate(bigPic.children[index],{opacity:1});
+
+                // 小图改变
+                // 上一张：透明度变为0.5
+                // 当前：透明变成1
+                animate(smallPic.children[lastIndex],{opacity:0.5});
+                animate(smallPic.children[index],{opacity:1});
+
+                // 小图左右滚动
+                // 改变#smallpic的left值
+                if(index<2){
+                    animate(smallpic,{left:0});
+                }else{
+                    animate(smallpic,{left:-(index-2)*smallPicWidth});
+                }
+                
+                // 0,1,2==>0,3==>-170,4==>340
+                // top = -(index-2)*170
+                
+                // 更新上一张索引值
+                lastIndex = index;
+            }
+
+            // 初始化函数
+            // 把除第一张以外的所有大图透明度改成0
+            // 把除第一张以外的所有小图透明度改成0.5
+            function init(){
+                for(var i=0;i<len;i++){
+                    bigPic.children[i].style.opacity = 0;
+                    smallPic.children[i].style.opacity = 0.5;
+
+                    // 4)点击小图，显示相应的大图效果
+                    // 把index改成当前小图对应索引值
+                    smallPic.children[i].index = i;
+                    smallPic.children[i].onclick = function(){
+                        index = this.index;
+                        showImg();
+                    }
+                }
+
+                // 高亮显示第一张
+                bigPic.children[0].style.opacity = 1;
+                smallPic.children[0].style.opacity = 1;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="focus">
+        <ul id="bigpic">
+            <li><img src="img/g1.jpg"></li>
+            <li><img src="img/g2.jpg"></li>
+            <li><img src="img/g3.jpg"></li>
+            <li><img src="img/g4.jpg"></li>
+
+            <li><img src="img/g1.jpg"></li>
+            <li><img src="img/g2.jpg"></li>
+            <li><img src="img/g3.jpg"></li>
+            <li><img src="img/g4.jpg"></li>
+
+            <li><img src="img/g1.jpg"></li>
+            <li><img src="img/g2.jpg"></li>
+            <li><img src="img/g3.jpg"></li>
+            <li><img src="img/g4.jpg"></li>
+        </ul>
+        <div class="small-wrap">
+            <ul id="smallpic">
+                <li><img src="img/g1.jpg"></li>
+                <li><img src="img/g2.jpg"></li>
+                <li><img src="img/g3.jpg"></li>
+                <li><img src="img/g4.jpg"></li>
+
+                <li><img src="img/g1.jpg"></li>
+                <li><img src="img/g2.jpg"></li>
+                <li><img src="img/g3.jpg"></li>
+                <li><img src="img/g4.jpg"></li>
+
+                <li><img src="img/g1.jpg"></li>
+                <li><img src="img/g2.jpg"></li>
+                <li><img src="img/g3.jpg"></li>
+                <li><img src="img/g4.jpg"></li>
+            </ul>
+        </div>
+        <a href="#" class="prev">&lt;</a>
+        <a href="#" class="next">&gt;</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>09封装动画函数</title>
+	<style>
+		.box{position:absolute;left:200px;width:100px;height:100px;background-color: #f00;}
+	</style>
+	<script src="../common.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded',function(){
+			var box = document.querySelector('.box');
+
+			animate(box,'opacity',0.3);
+			animate(box,'width',600);
+
+			// animate(box,{opacity:0.3,width:600});
+		});
+	</script>
+</head>
+<body>
+	<div class="box"></div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>08提取数据</title>
+	<script>
+		/*
+			取出name, age和gender的值
+			1)先获取?后的字符
+			2）用&分隔字符串为数组
+			3)遍历数组，提取name,age,gender
+		 */
+		var url = 'https://www.baidu.com/s?name=wangmouqiang&age=20&gender=male'
+		 // substring(start[,end])：不包括end所在字符，end省略表示截取到最后
+		console.log(url.substring(2,5));//tps  不包括第五位
+		// substr(start[,len])：支持负数，len为截取的数量
+		console.log(url.substr(-10,5));//ender   不包括第十位
+
+
+		// var name = url.substr(url.indexOf('name=')+5,6);
+		// console.log(name)
+
+		// 1)先获取?后的字符
+		var idx = url.indexOf('?');//拿到?索引值
+		console.log(idx);//23
+
+		var attr = url.substring(idx+1);//截取?以后的字符串
+		attr = attr.split('&');//用&进行分割
+		console.log(attr);//["name=wangmouqiang", "age=20", "gender=male"]
+
+		attr.forEach(function(item){
+			var arr = item.split('=');//在用等号进行分割
+			console.log(arr[0],arr[1]);
+			console.log(arr);
+		});
+	</script>
+</head>
+<body>
+</body>
+</html>

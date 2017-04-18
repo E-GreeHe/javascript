@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>10滚动轮播图</title>
+	<style>
+		*{margin: 0;padding: 0;}
+		ul{list-style: none;padding:0;margin:0;}
+		.carousel{position:absolute;border:5px solid #ddd;width:320px;height:200px;overflow:hidden;left: 0;right: 0;margin: auto;top: 100px;}
+		.carousel .list{position:absolute;}
+		.carousel .list img{display:block; width: 100%;height: 100%;}
+		.carousel .btnList{position: absolute;bottom: 10px;right: 10px;}
+		.btnList li{float: left;width: 8px;height: 8px;border-radius: 50%; line-height: 8px;background: #ddd;margin-right: 10px;text-align: center;text-indent: -999px; cursor: pointer;}
+		.btnList li.active{background:#f30;color:#fff;}
+		.prev,.next {position: absolute;width: 20px;height: 20px;line-height: 20px;text-align: center;background: #ddd;top: 0;bottom: 0;margin: auto;opacity: 0.5;cursor: pointer;display: none;}
+		.prev{left: 0;}
+		.next{right: 0;}
+	</style>
+	<script src="common.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded',()=>{
+			let carousel = document.querySelector('.carousel');
+			let list = carousel.children[0];
+			let btnList = document.querySelector('.btnList').children;
+			let prev = document.querySelector('.prev');
+			let next = document.querySelector('.next');
+			console.log(btnList)
+			// 默认显示第一张
+			var idx = 0;
+
+			// 获取图片的高度
+			var imgHeight = carousel.clientHeight;
+
+			let timer = setInterval(autoPlay,3000);
+
+
+			// 鼠标移入移出
+			carousel.onmouseenter = function(){
+				clearInterval(timer);
+				prev.style.display = 'block';
+				next.style.display = 'block';
+
+			}
+
+			carousel.onmouseleave = function(){
+				timer = setInterval(autoPlay,3000);
+				prev.style.display = 'none';
+				next.style.display = 'none';
+			}
+
+			// 前按钮
+			prev.onclick = function(){
+				idx--;
+				if(idx<0){
+					idx = carousel.children.length
+				}
+				show();
+			}
+			// 后按钮
+			next.onclick = function(){
+				idx++;
+				if(idx > carousel.children.length){
+					idx = 0;
+				}
+				show();
+			}
+
+			// 给btnList添加点击事件
+			for(let n=0;n<btnList.length;n++){
+				btnList[n].idx = n;
+				btnList[n].onclick = function(){
+					idx = this.idx;
+					show()
+				}
+			}
+			// 图片显示
+			function show(){
+				// 清除其他btnList的高亮样式
+				for(var i=0;i<btnList.length;i++){
+					btnList[i].classList.remove('active');
+				}
+				btnList[idx].classList.add('active');
+				animate(list,{top:-idx*imgHeight});
+			}
+			
+
+			// 封装轮播函数
+			function autoPlay(){
+				idx++;
+
+				// 到最后一张时，重新回到第一张
+				if(idx>list.children.length-1){
+					idx = 0;
+				}
+				show();
+				// animate(list,{top:-idx*imgHeight});
+			}
+		});
+	</script>
+</head>
+<body>
+	<div class="carousel">
+		<ul class="list">
+			<li><img src="img/g1.jpg" alt=""></li>
+			<li><img src="img/g2.jpg" alt=""></li>
+			<li><img src="img/g3.jpg" alt=""></li>
+			<li><img src="img/g4.jpg" alt=""></li>
+			<li><img src="img/g5.jpg" alt=""></li>
+		</ul>
+		<ul class="btnList">
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ul>
+		<div class="prev">
+			&lt;
+		</div>
+		<div class="next">
+			&gt;
+		</div>
+	</div>
+</body>
+</html>

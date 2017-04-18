@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{margin:0;height:100%;}
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .cart-list {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        width: 200px;
+        /*height: 400px;*/
+        border: 1px solid #ddd;
+        /*overflow-y:auto;*/
+    }
+    
+    .cart-list h4 {
+        margin: 0;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+
+    }
+    .cart-list img {
+        width: 60px;
+    }
+
+    .cart-list li{position:relative;height:200px;}
+    .cart-list .btn-close{position:absolute;top:0;right:0;padding:5px;}
+    .cart-list .btn-close:hover{background-color:#f00;color:#fff;}
+    
+    .goods-list li{float:left;padding:10px 15px;width:300px;height:400px;}
+    .goods-list img {
+        width: 200px;
+    }
+
+	</style>
+
+</head>
+<script src='common.js'></script>
+    <script>
+
+    	document.addEventListener('DOMContentLoaded',()=>{
+         
+        var goods_list=document.getElementsByClassName('goods-list')[0];
+        var oLi1=goods_list.getElementsByTagName('li')
+         
+         var cart_list=document.getElementsByClassName('cart-list')[0];
+        var oUl2=cart_list.getElementsByTagName('ul')[0]
+        // for (var i = 0; i < oLi1.length; i++) {
+        	
+        // 	var oBtnPrev=oLi1[0].children[1].children[0];
+
+            var oBtnPrev=goods_list.getElementsByTagName('button')
+            for (var i = 0; i < oBtnPrev.length; i++) {
+                     
+                   
+            
+        	 oBtnPrev[i].onclick=function(e){
+                var h=this.id
+        	 	var e=e||window.event
+                     
+        	 	var divX=window.innerWidth-e.clientX-200;
+        	 	var divy=e.clientY;
+        	 	
+        	 var oDiv1=document.createElement('div');
+        	            oDiv1.style.width = '20px';
+						oDiv1.style.height = '20px';
+						oDiv1.style.position = 'absolute';
+						oDiv1.style.left = -divX + 'px';
+						oDiv1.style.top = divy+ 'px';
+                  oDiv1.innerHTML='<img src="img/timg'+h+'.jpg">'
+                    oUl2.appendChild(oDiv1);
+                    startMove(oDiv1, {left:0,top:0},function(){
+                          
+                          		 oDiv1.style.display='none'; 
+                            var oLi2=document.createElement('li');
+                		 oUl2.appendChild(oLi2);
+                		 oLi2.innerHTML='<img src="img/timg'+h+'.jpg"><p>亚瑟士ASICS跑步鞋2015春夏新款运动鞋男款避震跑鞋KAYANO T4H2N-9001 橙色/白色 42</p>'
+
+             
+
+                    })
+                    
+        	 }        
+
+        }
+
+    	});
+    </script>
+<body>
+	<div class="goods-list">
+        <h4>产品列表</h4>
+        <ul>
+            <li><img src="img/timg1.jpg">
+                <p>
+                    <button id='1'>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS跑步鞋2015春夏新款运动鞋男款避震跑鞋KAYANO T4H2N-9001 橙色/白色 42</p>
+            </li>
+            <li><img src="img/timg2.jpg">
+                <p>
+                    <button id='2'>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS运动鞋2015春夏新款跑步鞋女鞋稳定跑鞋KAYANO T4H7N-0701 黄色/白色 37.5</p>
+            </li>
+            <li><img src="img/timg3.jpg">
+                <p>
+                    <button id='3'>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS跑步鞋春夏透气稳定女款跑鞋 KAYANO T4N5N-3591 玫红色/黑色 37.5</p>
+            </li>
+            <li><img src="img/timg4.jpg">
+                <p>
+                    <button id='4'>添加到购物车</button>
+                </p>
+                <p>亚瑟士ASICS高帮运动休闲鞋男鞋运动鞋DOUBLEH54XJ-5050 黑色/黑色 40.5</p>
+            </li>
+            <li><img src="img/timg5.jpg">
+                <p>
+                    <button id='5'>添加到购物车</button>
+                </p>
+                <p>Onitsuka Tiger运动休闲鞋女COLORADO D4S6N-1850 珊瑚色/淡灰色 37.5</p>
+            </li>
+        </ul>
+    </div>
+    <div class="cart-list">
+        <h4>购物车列表</h4>
+        <ul>
+        </ul>
+    </div>
+
+</body>
+</html>

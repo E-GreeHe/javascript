@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+        *{margin: 0;padding: 0;}
+        .boxFacade{width: 500px;margin-left: 50px;margin-top: 40px;float: left;}
+        .content{width: 500px;margin-top: 20px;}
+        .content span{width: 30px;height: 30px;border: 1px solid #ddd;text-align: center;line-height: 30px;display: inline-block;}
+        .content .change{width: 400px;height: 20px; border: 1px solid #ddd;background: #eee;text-indent: 50px;position: relative;left: 60px;top: -25px;}
+        .content .current{width: 20px;height: 40px;position: absolute;background: #3979dd;top: -10px;left: 0px;}
+        .content .dragScope{position: absolute;background: #3979dd;width: 0;height: 20px;top: 0;color: #f30;}
+        
+        .boxCreative{width: 500px;margin-left: 50px;margin-top: 40px;float: left;}
+    </style>
+    <script type="text/javascript">
+    	/*思路:(进度条)
+    	 * 1.拖动滑块current
+    	 *	2.滑块拖动的时候 content的背景变为跟滑块一样
+    	 * 	3.num成百分比增加
+    	*/
+    	//事件监听  延迟代码执行  
+        document.addEventListener('DOMContentLoaded',function(){
+        	//获取元素
+        	var change = document.querySelector('.change'),
+        		dragScope = document.querySelector('.dragScope'),
+        		current = document.querySelector('.current');
+        	console.log(change);
+        	//定义一个初始值  用于判断拖动块的范围
+            var disLeft = 0;
+            // 鼠标按下current拖动块
+        	current.onmousedown = function(evt){
+        		var x = evt.clientX-this.offsetLeft;
+        		console.log(x,evt.clientX);
+        		var self = this;
+        		console.log(this)
+                // 拖动滑块
+                document.onmousemove = function(e){
+                    disLeft = e.clientX - x;
+                    //控制拖动范围
+                    if(disLeft<0){
+                    	disLeft = 0;
+                    }
+                    //拖动范围不超过change的宽度  其实际拖动的left等于change的宽度减去自身宽度
+                    //实际拖动宽度380px
+                    else if(disLeft > change.offsetWidth - current.offsetWidth){
+                    	disLeft = change.offsetWidth - current.offsetWidth;
+                    }
+                    //改变dragScope背景色  随着滑块的拖动
+                    dragScope.style.width = disLeft + 'px';
+                    self.style.left = disLeft + "px";
+                    //得到dragScope 的拖动百分比
+                    dragScope.innerHTML = parseInt(disLeft / (change.offsetWidth - current.offsetWidth) * 100) + "%";
+                    e.preventDefault();
+                }
+        	}
+        	//鼠标弹开  清空move事件
+            document.onmouseup = function(){
+                document.onmousemove = null;
+            }
+        	
+        });
+    </script>
+</head>
+<body>
+    <div class="boxFacade">
+        <p>外观-你觉得这个创意外观上优秀吗？<span>分数越高越好</span></p>
+        <div>
+            <div class="content">
+                <span>70</span>
+                <div class="change">
+                    <div class="current"></div>
+                    <div class="dragScope">%</div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </div>
+<!--     <div class="boxCreative">
+        <p>成本-你觉得这个创意在成本上优秀吗？<span>分数越高越好</span></p>
+        <div>
+            <div class="content">
+                <span>71</span>
+                <div class="change">
+                    <div class="current"></div>
+                    <div class="dragScope">%</div>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </div> -->
+</body>
+</html>
